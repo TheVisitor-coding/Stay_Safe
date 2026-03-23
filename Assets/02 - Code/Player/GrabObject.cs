@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class GrabObject : MonoBehaviour
 {
+    [SerializeField] private Camera playerCamera;
+    [SerializeField] private float grabDistance = 5f;
+    [SerializeField] private Transform holdPosition;
 
-    public Camera playerCamera;
-    public float grabDistance = 5f;
-    private GameObject grabbedObject;
-    public Transform holdPosition;
-    private BarricadePoint currentBarricadePoint;
+    private GameObject _grabbedObject;
+    private BarricadePoint _currentBarricadePoint;
 
     void Update()
     {
@@ -18,76 +18,57 @@ public class GrabObject : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (grabbedObject == null)
-            {
+            if (_grabbedObject == null)
                 PickUpObject(rayOrigin, rayDirection);
-            } else 
-             {
+            else
                 DropObject();
-             }
         }
     }
 
-
-    void PickUpObject(Vector3 rayOrigin, Vector3 rayDirection)
+    private void PickUpObject(Vector3 rayOrigin, Vector3 rayDirection)
     {
         RaycastHit hit;
         bool hasHit = Physics.Raycast(rayOrigin, rayDirection, out hit, grabDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
 
-        if (hasHit)
-        {
-            if (hit.transform.CompareTag("canPickUp"))
-            {
-                grabbedObject = hit.transform.gameObject;
-                Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
+        if (!hasHit || !hit.transform.CompareTag("canPickUp")) return;
 
-                if (rb == null)
-                {
-                    grabbedObject = null;
-                    return;
-                }
+        Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
+        if (rb == null) return;
 
-                rb.isKinematic = true;
-                grabbedObject.transform.SetParent(holdPosition);
-                grabbedObject.transform.localPosition = Vector3.zero;
-                grabbedObject.transform.localRotation = Quaternion.identity;
-                grabbedObject.GetComponent<Collider>().enabled = false;
-            }
-        }
+        _grabbedObject = hit.transform.gameObject;
+        rb.isKinematic = true;
+        _grabbedObject.transform.SetParent(holdPosition);
+        _grabbedObject.transform.localPosition = Vector3.zero;
+        _grabbedObject.transform.localRotation = Quaternion.identity;
+        _grabbedObject.GetComponent<Collider>().enabled = false;
     }
 
-    void DropObject()
+    private void DropObject()
     {
-        if (currentBarricadePoint != null)
+        if (_currentBarricadePoint != null)
         {
-            currentBarricadePoint.Barricade(grabbedObject);
-            grabbedObject = null;
-        } else
-        {
-            Rigidbody rb = grabbedObject.GetComponent<Rigidbody>();
-            rb.isKinematic = false;
-            grabbedObject.transform.SetParent(null);
-            grabbedObject.GetComponent<Collider>().enabled = true;
-            grabbedObject = null;
+            _currentBarricadePoint.Barricade(_grabbedObject);
         }
+        else
+        {
+            Rigidbody rb = _grabbedObject.GetComponent<Rigidbody>();
+            rb.isKinematic = false;
+            _grabbedObject.transform.SetParent(null);
+            _grabbedObject.GetComponent<Collider>().enabled = true;
+        }
+
+        _grabbedObject = null;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("BarricadePoint"))
-        {
-            currentBarricadePoint = other.GetComponent<BarricadePoint>();
-        }
+            _currentBarricadePoint = other.GetComponent<BarricadePoint>();
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("BarricadePoint"))        
-        {
-            if (currentBarricadePoint != null && other.GetComponent<BarricadePoint>() == currentBarricadePoint)
-            {                
-                currentBarricadePoint = null;
-            }
-        }
+        if (other.CompareTag("BarricadePoint") && other.GetComponent<BarricadePoint>() == _currentBarricadePoint)
+            _currentBarricadePoint = null;
     }
 }

@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class BarricadePoint : MonoBehaviour
 {
-    public enum BarricadeState { Open, Barricaded };
-    [SerializeField] private BarricadeState barricadeState = BarricadeState.Open;
+    public enum BarricadeState { Open, Barricaded }
 
-    public Transform snapPosition;
+    [SerializeField] private BarricadeState barricadeState = BarricadeState.Open;
+    [SerializeField] private Transform snapPosition;
 
     public void Barricade(GameObject barricadeObject)
     {
@@ -18,8 +18,5 @@ public class BarricadePoint : MonoBehaviour
         }
     }
 
-    public BarricadeState GetBarricadeState()
-    {
-        return barricadeState;
-    }
+    public BarricadeState GetBarricadeState() => barricadeState;
 }
