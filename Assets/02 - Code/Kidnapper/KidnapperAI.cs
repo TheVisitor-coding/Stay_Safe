@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class KidnapperAI : MonoBehaviour
 {
@@ -23,6 +24,19 @@ public class KidnapperAI : MonoBehaviour
     private BarricadePoint[] _accessPoints;
     private bool _isActive = false;
     private Coroutine _attackCoroutine;
+
+    private NavMeshAgent agent;
+
+    void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        agent.speed = moveSpeed;
+    }
+
+    void Update()
+    {
+        
+    }
 
     public void Initialize(BarricadePoint[] accessPoints)
     {
@@ -62,7 +76,6 @@ public class KidnapperAI : MonoBehaviour
             yield return new WaitForSeconds(delayBetweenRounds);
 
             BarricadePoint target = GetRandomOpenAccessPoint();
-            if (target == null) continue;
 
             OnAttackStarted?.Invoke(target);
             Debug.Log($"[Kidnapper] Cible : {target.name}");
@@ -71,10 +84,8 @@ public class KidnapperAI : MonoBehaviour
             yield return MoveToTarget(target.transform.position);
 
             // Phase 2 : forçage de l'accès — la source audio est positionnée sur le point attaqué
-            forcingSource.transform.position = target.transform.position;
-            Debug.Log($"[Kidnapper] Forçage de {target.name} — {forcingDuration}s pour barricader");
             forcingSource.Play();
-            Debug.Log($"[Kidnapper] Audio de forçage activé", forcingSource);
+
             yield return new WaitForSeconds(forcingDuration);
             forcingSource.Stop();
 
@@ -83,6 +94,7 @@ public class KidnapperAI : MonoBehaviour
             {
                 _isActive = false;
                 Debug.Log("[Kidnapper] Accès forcé — défaite");
+                agent.isStopped = true;
                 OnAccessBreached?.Invoke();
                 yield break;
             }
@@ -97,19 +109,11 @@ public class KidnapperAI : MonoBehaviour
         footstepsSource.Play();
         Debug.Log($"[Kidnapper] Audio de déplacement activé", footstepsSource);
 
-        Vector3 startPosition = transform.position;
-        float distance = Vector3.Distance(startPosition, destination);
-        float travelDuration = Mathf.Max(distance / moveSpeed, minimumTravelDuration);
-        float elapsed = 0f;
-
-        while (elapsed < travelDuration)
+        agent.SetDestination(destination);
+        while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
         {
-            elapsed += Time.deltaTime;
-            transform.position = Vector3.Lerp(startPosition, destination, elapsed / travelDuration);
             yield return null;
         }
-
-        transform.position = destination;
         footstepsSource.Stop();
     }
 

@@ -10,6 +10,10 @@ public class GrabObject : MonoBehaviour
     [SerializeField] private GameObject keypressHint;
     [SerializeField] private float barricadeTime = 2f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource barricadeAudioSource;
+    [SerializeField] private AudioSource pickupAudioSource;
+
     private GameObject _grabbedObject;
     private BarricadePoint _currentBarricadePoint;
     private float _barricadeProgress = 0f;
@@ -32,6 +36,7 @@ public class GrabObject : MonoBehaviour
             barricadeProgressBar.value = _barricadeProgress / barricadeTime;
 
             if (_barricadeProgress >= barricadeTime)
+                barricadeAudioSource.Play();
                 CompleteBarricade();
 
             return;
@@ -80,6 +85,7 @@ public class GrabObject : MonoBehaviour
         _grabbedObject.transform.localPosition = Vector3.zero;
         _grabbedObject.transform.localRotation = Quaternion.identity;
         _grabbedObject.GetComponent<Collider>().enabled = false;
+        pickupAudioSource.Play();
     }
 
     private void DropObject()
