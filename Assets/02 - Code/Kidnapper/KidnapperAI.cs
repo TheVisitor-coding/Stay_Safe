@@ -74,6 +74,7 @@ public class KidnapperAI : MonoBehaviour
             forcingSource.transform.position = target.transform.position;
             Debug.Log($"[Kidnapper] Forçage de {target.name} — {forcingDuration}s pour barricader");
             forcingSource.Play();
+            Debug.Log($"[Kidnapper] Audio de forçage activé", forcingSource);
             yield return new WaitForSeconds(forcingDuration);
             forcingSource.Stop();
 
@@ -94,6 +95,7 @@ public class KidnapperAI : MonoBehaviour
     private IEnumerator MoveToTarget(Vector3 destination)
     {
         footstepsSource.Play();
+        Debug.Log($"[Kidnapper] Audio de déplacement activé", footstepsSource);
 
         Vector3 startPosition = transform.position;
         float distance = Vector3.Distance(startPosition, destination);
@@ -126,6 +128,7 @@ public class KidnapperAI : MonoBehaviour
 
     private void StopAudio()
     {
+        Debug.Log("[Kidnapper] Arrêt des sons");
         if (footstepsSource != null && footstepsSource.isPlaying) footstepsSource.Stop();
         if (forcingSource != null && forcingSource.isPlaying) forcingSource.Stop();
     }
