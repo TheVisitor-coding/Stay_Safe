@@ -1,12 +1,19 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public TextMeshProUGUI gameOverText;
+    public Button restartButton;
     public static GameManager Instance;
 
     [SerializeField] private BarricadePoint[] barricadePoints;
     [SerializeField] private KidnapperAI kidnapper;
+    [SerializeField] private Image fadeImage;
+    [SerializeField] private float fadeDuration = 2f;
     public float policeArrivalTime = 300f;
     [SerializeField] private float timeForExploration = 60f;
     [SerializeField] private GameState currentGameState;
@@ -40,6 +47,7 @@ public class GameManager : MonoBehaviour
         currentGameState = GameState.Intro;
         Debug.Log($"[GameManager] Game state: {currentGameState}");
         OnGameStateChanged?.Invoke(currentGameState);
+
     }
 
     void Update()
@@ -87,11 +95,52 @@ public class GameManager : MonoBehaviour
 
     private void OnAccessBreached()
     {
+        if (currentGameState == GameState.Lost) return;
         currentGameState = GameState.Lost;
         kidnapper.StopAttack();
         Debug.Log("[GameManager] GAME OVER");
         OnGameStateChanged?.Invoke(currentGameState);
-        // TODO : écran de défaite
+        
+        StartCoroutine(GameOverSequence());
+
+    }
+
+    private System.Collections.IEnumerator GameOverSequence()
+    {
+       if(fadeImage != null)
+       {
+        fadeImage.gameObject.SetActive(true);
+        float elapsedTime = 0f;
+        Color color = fadeImage.color;
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            color.a = Mathf.Clamp01(elapsedTime / fadeDuration);
+            fadeImage.color = color;
+            yield return null;
+        }
+
+       }
+       if (gameOverText != null) gameOverText.gameObject.SetActive(true);
+       if (restartButton != null) restartButton.gameObject.SetActive(true);
+
+        Time.timeScale = 0f; 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    public void GameOver()
+    {
+        if (gameOverText != null)
+        {
+            gameOverText.gameObject.SetActive(true);
+            restartButton.gameObject.SetActive(true);
+        }
+
+        Time.timeScale = 0f; 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
     }
 
     private void PoliceArrive()
@@ -102,5 +151,12 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GameManager] Victoire !");
         OnGameStateChanged?.Invoke(currentGameState);
         // TODO : écran de victoire
+    }
+
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
     }
 }
