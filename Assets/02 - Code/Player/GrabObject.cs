@@ -23,7 +23,9 @@ public class GrabObject : MonoBehaviour
         Vector3 rayOrigin = playerCamera.transform.position;
         Vector3 rayDirection = playerCamera.transform.forward;
 
-        bool canBarricade = _grabbedObject != null && _currentBarricadePoint != null && GameManager.Instance.GetGameState() == GameManager.GameState.Playing;
+        GameManager.GameState state = GameManager.Instance.GetGameState();
+        bool canBarricade = _grabbedObject != null && _currentBarricadePoint != null
+            && (state == GameManager.GameState.Playing || state == GameManager.GameState.Tutorial);
 
         // Cas 1 : hold E pour barricader
         if (canBarricade && Input.GetKey(KeyCode.E))

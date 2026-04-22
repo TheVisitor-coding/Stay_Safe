@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class BarricadePoint : MonoBehaviour
 {
     public enum BarricadeState { Open, Barricaded }
+
+    public static event Action<BarricadePoint> OnBarricaded;
 
     [SerializeField] private BarricadeState barricadeState = BarricadeState.Open;
     [SerializeField] private Transform snapPosition;
@@ -15,6 +18,7 @@ public class BarricadePoint : MonoBehaviour
             barricadeObject.transform.rotation = snapPosition.rotation;
             barricadeObject.transform.SetParent(transform);
             barricadeState = BarricadeState.Barricaded;
+            OnBarricaded?.Invoke(this);
         }
     }
 

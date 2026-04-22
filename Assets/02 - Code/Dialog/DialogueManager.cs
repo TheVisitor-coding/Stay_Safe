@@ -8,9 +8,12 @@ public class DialogueManager : MonoBehaviour
     public static DialogueManager Instance;
 
     [SerializeField] private DialogueDatabase database;
+    public DialogueDatabase Database => database;
     [SerializeField] private TextMeshProUGUI dialogueText;
-    [SerializeField] private CanvasGroup dialogueCanvasGroup;
+    // [SerializeField] private CanvasGroup dialogueCanvasGroup;
     [SerializeField] private float fadeDuration = 0.3f;
+    [SerializeField] private float typewriterSpeed = 0.05f;
+    [SerializeField] private AudioSource typewriterAudioSource;
 
     private Queue<DialogueLine> _queue = new();
     private Coroutine _displayCoroutine;
@@ -34,6 +37,7 @@ public class DialogueManager : MonoBehaviour
 
     public void Enqueue(DialogueLine[] lines)
     {
+        Debug.Log($"[DialogueManager] Enqueue {lines.Length} lines");
         if (lines == null || lines.Length == 0) return;
 
         foreach (var line in lines)
@@ -45,6 +49,7 @@ public class DialogueManager : MonoBehaviour
 
     public void EnqueuePriority(DialogueLine[] lines)
     {
+        Debug.Log($"[DialogueManager] EnqueuePriority {lines.Length} lines");
         if (_displayCoroutine != null)
             StopCoroutine(_displayCoroutine);
 
@@ -58,51 +63,68 @@ public class DialogueManager : MonoBehaviour
     {
         _isPlaying = true;
 
-        while (_queue.Count > 0)
+        try
         {
-            var line = _queue.Dequeue();
+            while (_queue.Count > 0)
+            {
+                var line = _queue.Dequeue();
 
-            if (line.delayBefore > 0)
-                yield return new WaitForSeconds(line.delayBefore);
+                if (line.delayBefore > 0)
+                    yield return new WaitForSeconds(line.delayBefore);
 
-            yield return StartCoroutine(DisplayLine(line));
+                yield return StartCoroutine(DisplayLine(line));
+            }
         }
-
-        _isPlaying = false;
-        yield return StartCoroutine(FadeOut());
+        finally
+        {
+            _isPlaying = false;
+            dialogueText.text = string.Empty;
+        }
     }
 
     private IEnumerator DisplayLine(DialogueLine line)
     {
-        dialogueText.text = line.text;
-        yield return StartCoroutine(FadeIn());
+        dialogueText.text = string.Empty;
+
+        foreach (char c in line.text)
+        {
+            dialogueText.text += c;
+
+            if (typewriterAudioSource != null && typewriterAudioSource.clip != null && c != ' ')
+                typewriterAudioSource.PlayOneShot(typewriterAudioSource.clip);
+
+            yield return new WaitForSeconds(typewriterSpeed);
+        }
+
+        // yield return StartCoroutine(FadeIn());
         yield return new WaitForSeconds(line.displayDuration);
-        yield return StartCoroutine(FadeOut());
+
+        dialogueText.text = string.Empty;
     }
 
-    private IEnumerator FadeIn()
-    {
-        float t = 0;
-        while (t < fadeDuration)
-        {
-            dialogueCanvasGroup.alpha = t / fadeDuration;
-            t += Time.deltaTime;
-            yield return null;
-        }
-        dialogueCanvasGroup.alpha = 1;
-    }
+    // private IEnumerator FadeIn()
+    // {
+    //     float t = 0;
+    //     while (t < fadeDuration)
+    //     {
+    //         dialogueCanvasGroup.alpha = t / fadeDuration;
+    //         t += Time.deltaTime;
+    //         yield return null;
+    //     }
+    //     dialogueCanvasGroup.alpha = 1;
+    // }
 
-    private IEnumerator FadeOut()
-    {
-        float t = fadeDuration;
-        while (t > 0)
-        {
-            dialogueCanvasGroup.alpha = t / fadeDuration;
-            t -= Time.deltaTime;
-            yield return null;
-        }
-        dialogueCanvasGroup.alpha = 0;
-    }
+    // private IEnumerator FadeOut()
+    // {
+    //     float t = fadeDuration;
+    //     while (t > 0)
+    //     {
+    //         dialogueCanvasGroup.alpha = t / fadeDuration;
+    //         t -= Time.deltaTime;
+    //         yield return null;
+    //     }
+    //     dialogueCanvasGroup.alpha = 0;
+    // }
 
     private void OnGameStateChanged(GameManager.GameState state)
     {

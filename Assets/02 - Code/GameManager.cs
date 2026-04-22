@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private BarricadePoint[] barricadePoints;
     [SerializeField] private KidnapperAI kidnapper;
-    public float policeArrivalTime = 300f;
+    [SerializeField] private float policeArrivalTime = 300f;
     [SerializeField] private float timeForExploration = 60f;
     [SerializeField] private GameState currentGameState;
     [SerializeField] private TutorialManager tutorialManager;
@@ -28,14 +28,18 @@ public class GameManager : MonoBehaviour
 
         KidnapperAI.OnAccessBreached += OnAccessBreached;
         KidnapperAI.OnAttackStarted += OnAttackStarted;
-        KidnapperAI.OnTutorialAttackStarted += startCinematicTutorial;
+        KidnapperAI.OnTutorialAttackStarted += OnTutorialAttackReady;
+        KidnapperAI.OnTutorialCompleted += OnTutorialCompleted;
+        TutorialManager.OnTutorialCinematicFinished += OnCinematicFinished;
     }
 
     void OnDestroy()
     {
         KidnapperAI.OnAccessBreached -= OnAccessBreached;
         KidnapperAI.OnAttackStarted -= OnAttackStarted;
-        KidnapperAI.OnTutorialAttackStarted -= startCinematicTutorial;
+        KidnapperAI.OnTutorialAttackStarted -= OnTutorialAttackReady;
+        KidnapperAI.OnTutorialCompleted -= OnTutorialCompleted;
+        TutorialManager.OnTutorialCinematicFinished -= OnCinematicFinished;
     }
 
     void Start()
@@ -71,13 +75,23 @@ public class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] Game state: {currentGameState}");
         OnGameStateChanged?.Invoke(currentGameState);
         kidnapper.StartTutorialAttack();
-        Debug.Log($"[GameManager] Game state: {currentGameState}");
     }
 
-    private void startCinematicTutorial()
+    private void OnTutorialAttackReady()
     {
-        Debug.Log("[GameManager] Démarrage du tutoriel cinématique");
+        Debug.Log("[GameManager] Kidnapper arrivé — lancement cinématique tutoriel");
         tutorialManager.PlayTutorialCinematic();
+    }
+
+    private void OnCinematicFinished()
+    {
+        Debug.Log("[GameManager] Cinématique terminée — lancement forçage tutoriel");
+        kidnapper.StartTutorialForcing();
+    }
+
+    private void OnTutorialCompleted()
+    {
+        Debug.Log("[GameManager] Tutoriel terminé — passage en Playing");
         StartPlaying();
     }
 
@@ -102,7 +116,6 @@ public class GameManager : MonoBehaviour
         kidnapper.StopAttack();
         Debug.Log("[GameManager] GAME OVER");
         OnGameStateChanged?.Invoke(currentGameState);
-        // TODO : écran de défaite
     }
 
     private void PoliceArrive()
@@ -112,6 +125,5 @@ public class GameManager : MonoBehaviour
         kidnapper.StopAttack();
         Debug.Log("[GameManager] Victoire !");
         OnGameStateChanged?.Invoke(currentGameState);
-        // TODO : écran de victoire
     }
 }

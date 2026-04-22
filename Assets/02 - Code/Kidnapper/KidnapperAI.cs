@@ -21,10 +21,10 @@ public class KidnapperAI : MonoBehaviour
     public static event Action OnAccessBreached;
     public static event Action<BarricadePoint> OnAttackStarted;
     public static event Action OnTutorialAttackStarted;
+    public static event Action OnTutorialCompleted;
 
     private BarricadePoint[] _accessPoints;
-    [SerializeField] private BarricadePoint firstAccessPoint; // Cinematic Tutorial
-    private bool _isActive = false;
+    [SerializeField] private BarricadePoint firstAccessPoint;
     private Coroutine _attackCoroutine;
 
     private NavMeshAgent agent;
@@ -48,10 +48,14 @@ public class KidnapperAI : MonoBehaviour
             return;
         }
 
-        if (_isActive) return;
+        if (_attackCoroutine != null) return;
 
-        _isActive = true;
-        _attackCoroutine = StartCoroutine(TutorialAttackCoroutine());
+        _attackCoroutine = StartCoroutine(TutorialApproachCoroutine());
+    }
+
+    public void StartTutorialForcing()
+    {
+        _attackCoroutine = StartCoroutine(TutorialForcingCoroutine());
     }
 
     public void StartAttack()
@@ -62,15 +66,13 @@ public class KidnapperAI : MonoBehaviour
             return;
         }
 
-        if (_isActive) return;
+        if (_attackCoroutine != null) return;
 
-        _isActive = true;
         _attackCoroutine = StartCoroutine(AttackCoroutine());
     }
 
     public void StopAttack()
     {
-        _isActive = false;
         StopAudio();
 
         if (_attackCoroutine != null)
@@ -82,66 +84,73 @@ public class KidnapperAI : MonoBehaviour
 
     private IEnumerator AttackCoroutine()
     {
-        while (_isActive)
+        yield return new WaitForSeconds(delayBetweenRounds);
+
+        BarricadePoint target = GetRandomOpenAccessPoint();
+
+        if (target == null)
         {
-            yield return new WaitForSeconds(delayBetweenRounds);
-
-            BarricadePoint target = GetRandomOpenAccessPoint();
-
-            OnAttackStarted?.Invoke(target);
-            Debug.Log($"[Kidnapper] Cible : {target.name}");
-
-            // Phase 1 : déplacement vers le point d'accès
-            yield return MoveToTarget(target.transform.position);
-
-            // Phase 2 : forçage de l'accès — la source audio est positionnée sur le point attaqué
-            forcingSource.Play();
-            timerGlitch.TriggerGlitchEffect(forcingDuration);
-
-            yield return new WaitForSeconds(forcingDuration);
-            forcingSource.Stop();
-
-            // Phase 3 : résultat
-            if (target.GetBarricadeState() == BarricadePoint.BarricadeState.Open)
-            {
-                _isActive = false;
-                Debug.Log("[Kidnapper] Accès forcé — défaite");
-                agent.isStopped = true;
-                OnAccessBreached?.Invoke();
-                yield break;
-            }
-
-            forcingDuration = Mathf.Max(minimumForcingDuration, forcingDuration - difficultyReductionPerRound);
-            Debug.Log($"[Kidnapper] Repoussé — prochain forçage en {forcingDuration}s");
+            _attackCoroutine = null;
+            yield break;
         }
-    }
 
-    private IEnumerator TutorialAttackCoroutine()
-    {
-        OnAttackStarted?.Invoke(firstAccessPoint);
-        Debug.Log($"[Kidnapper] Cible tutoriel : {firstAccessPoint.name}");
+        OnAttackStarted?.Invoke(target);
+        Debug.Log($"[Kidnapper] Cible : {target.name}");
 
-        // Phase 1 : déplacement vers le point d'accès
-        yield return MoveToTarget(firstAccessPoint.transform.position);
+        yield return MoveToTarget(target.transform.position);
 
-        // Phase 2 : forçage de l'accès — la source audio est positionnée sur le point attaqué
-        OnTutorialAttackStarted?.Invoke();
-
-        yield return new WaitForSeconds(3f);
-        Debug.Log("[Kidnapper] Début du forçage tutoriel");
         forcingSource.Play();
         timerGlitch.TriggerGlitchEffect(forcingDuration);
 
         yield return new WaitForSeconds(forcingDuration);
         forcingSource.Stop();
 
+        if (target.GetBarricadeState() == BarricadePoint.BarricadeState.Open)
+        {
+            _attackCoroutine = null;
+            agent.isStopped = true;
+            Debug.Log("[Kidnapper] Accès forcé — défaite");
+            OnAccessBreached?.Invoke();
+            yield break;
+        }
+
+        forcingDuration = Mathf.Max(minimumForcingDuration, forcingDuration - difficultyReductionPerRound);
+        Debug.Log($"[Kidnapper] Repoussé — prochain forçage en {forcingDuration}s");
+
+        _attackCoroutine = StartCoroutine(AttackCoroutine());
+    }
+
+    private IEnumerator TutorialApproachCoroutine()
+    {
+        OnAttackStarted?.Invoke(firstAccessPoint);
+        Debug.Log($"[Kidnapper] Cible tutoriel : {firstAccessPoint.name}");
+
+        yield return MoveToTarget(firstAccessPoint.transform.position);
+
+        _attackCoroutine = null;
+        forcingSource.Play();
+        OnTutorialAttackStarted?.Invoke();
+        DialogueManager.Instance.Enqueue(
+            DialogueManager.Instance.Database.onFirstAttack
+        );
+    }
+
+    private IEnumerator TutorialForcingCoroutine()
+    {
+        while (firstAccessPoint.GetBarricadeState() == BarricadePoint.BarricadeState.Open)
+        {
+            yield return null;
+        }
+
+        forcingSource.Stop();
+        _attackCoroutine = null;
         Debug.Log("[Kidnapper] Repoussé au tutoriel");
+        OnTutorialCompleted?.Invoke();
     }
 
     private IEnumerator MoveToTarget(Vector3 destination)
     {
         footstepsSource.Play();
-        Debug.Log($"[Kidnapper] Audio de déplacement activé", footstepsSource);
 
         agent.SetDestination(destination);
         while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
@@ -166,7 +175,6 @@ public class KidnapperAI : MonoBehaviour
 
     private void StopAudio()
     {
-        Debug.Log("[Kidnapper] Arrêt des sons");
         if (footstepsSource != null && footstepsSource.isPlaying) footstepsSource.Stop();
         if (forcingSource != null && forcingSource.isPlaying) forcingSource.Stop();
     }
