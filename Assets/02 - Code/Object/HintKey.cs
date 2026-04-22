@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HintKey : MonoBehaviour
@@ -15,7 +16,7 @@ public class HintKey : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!_isGrabbed && other.CompareTag("Player"))
+        if (!_isGrabbed && other.CompareTag("Player") && (GameManager.Instance.GetGameState() == GameManager.GameState.Playing || GameManager.Instance.GetGameState() == GameManager.GameState.Tutorial))
         {
             keypressHint.SetActive(true);
         }
@@ -23,7 +24,7 @@ public class HintKey : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && (GameManager.Instance.GetGameState() == GameManager.GameState.Playing || GameManager.Instance.GetGameState() == GameManager.GameState.Tutorial))
         {
             keypressHint.SetActive(false);
         }

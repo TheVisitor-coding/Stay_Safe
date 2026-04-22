@@ -15,11 +15,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioClip tensionMusic;
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private float musicFadeDuration = 2f;
+    [SerializeField] private AudioSource yawnSFX;
 
     public enum GameState { Intro, Exploration, Tutorial, Playing, Won, Lost }
 
     public static event Action<float> OnTimerUpdated;
     public static event Action<GameState> OnGameStateChanged;
+    public static event Action OnWakeUpPhase;
 
     void Awake()
     {
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
         KidnapperAI.OnTutorialAttackStarted += OnTutorialAttackReady;
         KidnapperAI.OnTutorialCompleted += OnTutorialCompleted;
         TutorialManager.OnTutorialCinematicFinished += OnCinematicFinished;
+        BedTrigger.OnPlayerWokeUp += OnPlayerWokeUp;
     }
 
     void OnDestroy()
@@ -44,6 +47,7 @@ public class GameManager : MonoBehaviour
         KidnapperAI.OnTutorialAttackStarted -= OnTutorialAttackReady;
         KidnapperAI.OnTutorialCompleted -= OnTutorialCompleted;
         TutorialManager.OnTutorialCinematicFinished -= OnCinematicFinished;
+        BedTrigger.OnPlayerWokeUp -= OnPlayerWokeUp;
     }
 
     void Start()
@@ -64,21 +68,28 @@ public class GameManager : MonoBehaviour
 
     public void StartExploration()
     {
+        yawnSFX.Play();
         currentGameState = GameState.Exploration;
         OnGameStateChanged?.Invoke(currentGameState);
-        Debug.Log($"[GameManager] Game state: {currentGameState}");
-
-        Invoke(nameof(StartTutorial), timeForExploration);
     }
 
     public GameState GetGameState() => currentGameState;
 
-    private void StartTutorial()
+    public void StartTutorial()
     {
         currentGameState = GameState.Tutorial;
         Debug.Log($"[GameManager] Game state: {currentGameState}");
         OnGameStateChanged?.Invoke(currentGameState);
-        kidnapper.StartTutorialAttack();
+        StartCoroutine(StartTutorialAttackAfterDelay());
+        DialogueManager.Instance.EnqueuePriority(
+            DialogueManager.Instance.Database.onTutorialStart
+        );
+
+        IEnumerator StartTutorialAttackAfterDelay()
+        {
+            yield return new WaitForSeconds(5f);
+            kidnapper.StartTutorialAttack();
+        }
     }
 
     private void OnTutorialAttackReady()
@@ -90,7 +101,13 @@ public class GameManager : MonoBehaviour
 
     private void OnCinematicFinished()
     {
-        Debug.Log("[GameManager] Cinématique terminée — lancement forçage tutoriel");
+        Debug.Log("[GameManager] Cinématique terminée — attente réveil joueur");
+        OnWakeUpPhase?.Invoke();
+    }
+
+    private void OnPlayerWokeUp()
+    {
+        Debug.Log("[GameManager] Joueur réveillé — lancement forçage tutoriel");
         kidnapper.StartTutorialForcing();
     }
 

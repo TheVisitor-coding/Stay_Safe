@@ -53,7 +53,7 @@ public class GrabObject : MonoBehaviour
         }
 
         // Cas 3 : appui simple E — ramasser ou poser librement
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && (state == GameManager.GameState.Playing || state == GameManager.GameState.Tutorial))
         {
             if (_grabbedObject == null)
                 PickUpObject(rayOrigin, rayDirection);

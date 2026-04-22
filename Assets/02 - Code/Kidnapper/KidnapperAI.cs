@@ -130,7 +130,7 @@ public class KidnapperAI : MonoBehaviour
         _attackCoroutine = null;
         forcingSource.Play();
         OnTutorialAttackStarted?.Invoke();
-        DialogueManager.Instance.Enqueue(
+        DialogueManager.Instance.EnqueuePriority(
             DialogueManager.Instance.Database.onFirstAttack
         );
     }

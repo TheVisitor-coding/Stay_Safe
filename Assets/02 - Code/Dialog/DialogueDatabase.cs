@@ -4,10 +4,9 @@ public class DialogueDatabase : MonoBehaviour
 {
     [Header("Phase 1 - Exploration")]
     public DialogueLine[] onGameStart;
-    public DialogueLine[] onFirstRoomDiscovered;
-    public DialogueLine[] onSecondRoomDiscovered;
 
     [Header("Phase 2 - Premier assaut")]
+    public DialogueLine[] onTutorialStart;
     public DialogueLine[] onFirstAttack;
     public DialogueLine[] onFirstBarricadeSuccess;
 
