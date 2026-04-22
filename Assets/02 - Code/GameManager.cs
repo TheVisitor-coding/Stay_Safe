@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,11 +7,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private BarricadePoint[] barricadePoints;
     [SerializeField] private KidnapperAI kidnapper;
-    [SerializeField] private float policeArrivalTime = 300f;
+    public float policeArrivalTime = 300f;
     [SerializeField] private float timeForExploration = 60f;
     [SerializeField] private GameState currentGameState;
 
-    public enum GameState { Exploration, Tutorial, Playing, Won, Lost }
+    public enum GameState { Intro, Exploration, Tutorial, Playing, Won, Lost }
+
+    public static event Action<float> OnTimerUpdated;
+    public static event Action<GameState> OnGameStateChanged;
 
     void Awake()
     {
@@ -33,7 +37,26 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        currentGameState = GameState.Intro;
+        Debug.Log($"[GameManager] Game state: {currentGameState}");
+        OnGameStateChanged?.Invoke(currentGameState);
+    }
+
+    void Update()
+    {
+        if (currentGameState == GameState.Playing)
+        {
+            float timeRemaining = Mathf.Max(0, policeArrivalTime - Time.timeSinceLevelLoad);
+            OnTimerUpdated?.Invoke(timeRemaining);
+        }
+    }
+
+    public void StartExploration()
+    {
         currentGameState = GameState.Exploration;
+        OnGameStateChanged?.Invoke(currentGameState);
+        Debug.Log($"[GameManager] Game state: {currentGameState}");
+
         Invoke(nameof(StartTutorial), timeForExploration);
     }
 
@@ -42,12 +65,16 @@ public class GameManager : MonoBehaviour
     private void StartTutorial()
     {
         currentGameState = GameState.Tutorial;
+        OnGameStateChanged?.Invoke(currentGameState);
+        Debug.Log($"[GameManager] Game state: {currentGameState}");
         StartPlaying();
     }
 
     private void StartPlaying()
     {
         currentGameState = GameState.Playing;
+        Debug.Log($"[GameManager] Game state: {currentGameState}");
+        OnGameStateChanged?.Invoke(currentGameState);
         kidnapper.Initialize(barricadePoints);
         kidnapper.StartAttack();
         Invoke(nameof(PoliceArrive), policeArrivalTime);
@@ -63,6 +90,7 @@ public class GameManager : MonoBehaviour
         currentGameState = GameState.Lost;
         kidnapper.StopAttack();
         Debug.Log("[GameManager] GAME OVER");
+        OnGameStateChanged?.Invoke(currentGameState);
         // TODO : écran de défaite
     }
 
@@ -72,6 +100,7 @@ public class GameManager : MonoBehaviour
         currentGameState = GameState.Won;
         kidnapper.StopAttack();
         Debug.Log("[GameManager] Victoire !");
+        OnGameStateChanged?.Invoke(currentGameState);
         // TODO : écran de victoire
     }
 }

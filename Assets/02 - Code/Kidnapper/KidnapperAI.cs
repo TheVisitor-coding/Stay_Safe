@@ -11,10 +11,10 @@ public class KidnapperAI : MonoBehaviour
     [SerializeField] private float forcingDuration = 8f;
     [SerializeField] private float minimumForcingDuration = 2f;
     [SerializeField] private float difficultyReductionPerRound = 0.5f;
+    [SerializeField] private PoliceTimer timerGlitch;
 
     [Header("Déplacement & Audio")]
     [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float minimumTravelDuration = 2f;
     [SerializeField] private AudioSource footstepsSource;
     [SerializeField] private AudioSource forcingSource;
 
@@ -85,6 +85,7 @@ public class KidnapperAI : MonoBehaviour
 
             // Phase 2 : forçage de l'accès — la source audio est positionnée sur le point attaqué
             forcingSource.Play();
+            timerGlitch.TriggerGlitchEffect(forcingDuration);
 
             yield return new WaitForSeconds(forcingDuration);
             forcingSource.Stop();

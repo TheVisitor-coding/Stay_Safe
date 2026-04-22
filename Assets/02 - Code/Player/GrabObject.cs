@@ -23,8 +23,6 @@ public class GrabObject : MonoBehaviour
         Vector3 rayOrigin = playerCamera.transform.position;
         Vector3 rayDirection = playerCamera.transform.forward;
 
-        Debug.DrawRay(rayOrigin, rayDirection * grabDistance, Color.green);
-
         bool canBarricade = _grabbedObject != null && _currentBarricadePoint != null && GameManager.Instance.GetGameState() == GameManager.GameState.Playing;
 
         // Cas 1 : hold E pour barricader
@@ -36,8 +34,10 @@ public class GrabObject : MonoBehaviour
             barricadeProgressBar.value = _barricadeProgress / barricadeTime;
 
             if (_barricadeProgress >= barricadeTime)
+            {
                 barricadeAudioSource.Play();
                 CompleteBarricade();
+            }
 
             return;
         }
@@ -85,6 +85,7 @@ public class GrabObject : MonoBehaviour
         _grabbedObject.transform.localPosition = Vector3.zero;
         _grabbedObject.transform.localRotation = Quaternion.identity;
         _grabbedObject.GetComponent<Collider>().enabled = false;
+        _grabbedObject.GetComponentInChildren<HintKey>()?.Hide();
         pickupAudioSource.Play();
     }
 
