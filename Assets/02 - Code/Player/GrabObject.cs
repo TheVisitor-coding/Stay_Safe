@@ -85,7 +85,7 @@ public class GrabObject : MonoBehaviour
         _grabbedObject.transform.localPosition = Vector3.zero;
         _grabbedObject.transform.localRotation = Quaternion.identity;
         _grabbedObject.GetComponent<Collider>().enabled = false;
-        _grabbedObject.GetComponentInChildren<HintKey>()?.Hide();
+        _grabbedObject.GetComponentInChildren<HintKey>()?.SetGrabbed(true);
         pickupAudioSource.Play();
     }
 
@@ -95,6 +95,7 @@ public class GrabObject : MonoBehaviour
         rb.isKinematic = false;
         _grabbedObject.transform.SetParent(null);
         _grabbedObject.GetComponent<Collider>().enabled = true;
+        _grabbedObject.GetComponentInChildren<HintKey>()?.SetGrabbed(false);
         _grabbedObject = null;
     }
 

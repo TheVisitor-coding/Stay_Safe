@@ -20,8 +20,10 @@ public class KidnapperAI : MonoBehaviour
 
     public static event Action OnAccessBreached;
     public static event Action<BarricadePoint> OnAttackStarted;
+    public static event Action OnTutorialAttackStarted;
 
     private BarricadePoint[] _accessPoints;
+    [SerializeField] private BarricadePoint firstAccessPoint; // Cinematic Tutorial
     private bool _isActive = false;
     private Coroutine _attackCoroutine;
 
@@ -33,14 +35,23 @@ public class KidnapperAI : MonoBehaviour
         agent.speed = moveSpeed;
     }
 
-    void Update()
-    {
-        
-    }
-
     public void Initialize(BarricadePoint[] accessPoints)
     {
         _accessPoints = accessPoints;
+    }
+
+    public void StartTutorialAttack()
+    {
+        if (firstAccessPoint == null)
+        {
+            Debug.LogError("[KidnapperAI] Aucun point d'accès assigné pour le tutoriel.");
+            return;
+        }
+
+        if (_isActive) return;
+
+        _isActive = true;
+        _attackCoroutine = StartCoroutine(TutorialAttackCoroutine());
     }
 
     public void StartAttack()
@@ -103,6 +114,28 @@ public class KidnapperAI : MonoBehaviour
             forcingDuration = Mathf.Max(minimumForcingDuration, forcingDuration - difficultyReductionPerRound);
             Debug.Log($"[Kidnapper] Repoussé — prochain forçage en {forcingDuration}s");
         }
+    }
+
+    private IEnumerator TutorialAttackCoroutine()
+    {
+        OnAttackStarted?.Invoke(firstAccessPoint);
+        Debug.Log($"[Kidnapper] Cible tutoriel : {firstAccessPoint.name}");
+
+        // Phase 1 : déplacement vers le point d'accès
+        yield return MoveToTarget(firstAccessPoint.transform.position);
+
+        // Phase 2 : forçage de l'accès — la source audio est positionnée sur le point attaqué
+        OnTutorialAttackStarted?.Invoke();
+
+        yield return new WaitForSeconds(3f);
+        Debug.Log("[Kidnapper] Début du forçage tutoriel");
+        forcingSource.Play();
+        timerGlitch.TriggerGlitchEffect(forcingDuration);
+
+        yield return new WaitForSeconds(forcingDuration);
+        forcingSource.Stop();
+
+        Debug.Log("[Kidnapper] Repoussé au tutoriel");
     }
 
     private IEnumerator MoveToTarget(Vector3 destination)

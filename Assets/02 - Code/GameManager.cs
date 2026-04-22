@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public float policeArrivalTime = 300f;
     [SerializeField] private float timeForExploration = 60f;
     [SerializeField] private GameState currentGameState;
+    [SerializeField] private TutorialManager tutorialManager;
 
     public enum GameState { Intro, Exploration, Tutorial, Playing, Won, Lost }
 
@@ -27,12 +28,14 @@ public class GameManager : MonoBehaviour
 
         KidnapperAI.OnAccessBreached += OnAccessBreached;
         KidnapperAI.OnAttackStarted += OnAttackStarted;
+        KidnapperAI.OnTutorialAttackStarted += startCinematicTutorial;
     }
 
     void OnDestroy()
     {
         KidnapperAI.OnAccessBreached -= OnAccessBreached;
         KidnapperAI.OnAttackStarted -= OnAttackStarted;
+        KidnapperAI.OnTutorialAttackStarted -= startCinematicTutorial;
     }
 
     void Start()
@@ -65,8 +68,16 @@ public class GameManager : MonoBehaviour
     private void StartTutorial()
     {
         currentGameState = GameState.Tutorial;
-        OnGameStateChanged?.Invoke(currentGameState);
         Debug.Log($"[GameManager] Game state: {currentGameState}");
+        OnGameStateChanged?.Invoke(currentGameState);
+        kidnapper.StartTutorialAttack();
+        Debug.Log($"[GameManager] Game state: {currentGameState}");
+    }
+
+    private void startCinematicTutorial()
+    {
+        Debug.Log("[GameManager] Démarrage du tutoriel cinématique");
+        tutorialManager.PlayTutorialCinematic();
         StartPlaying();
     }
 

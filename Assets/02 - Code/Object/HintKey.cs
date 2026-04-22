@@ -4,14 +4,18 @@ public class HintKey : MonoBehaviour
 {
     [SerializeField] private GameObject keypressHint;
 
-    public void Hide()
+    private bool _isGrabbed;
+
+    public void SetGrabbed(bool grabbed)
     {
-        keypressHint.SetActive(false);
+        _isGrabbed = grabbed;
+        if (grabbed)
+            keypressHint.SetActive(false);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (!_isGrabbed && other.CompareTag("Player"))
         {
             keypressHint.SetActive(true);
         }
