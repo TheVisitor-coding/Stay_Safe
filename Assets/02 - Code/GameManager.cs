@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float timeForExploration = 60f;
     [SerializeField] private GameState currentGameState;
     [SerializeField] private TutorialManager tutorialManager;
+    [SerializeField] private AudioClip tensionMusic;
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private float musicFadeDuration = 2f;
 
     public enum GameState { Intro, Exploration, Tutorial, Playing, Won, Lost }
 
@@ -81,6 +85,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("[GameManager] Kidnapper arrivé — lancement cinématique tutoriel");
         tutorialManager.PlayTutorialCinematic();
+        StartCoroutine(CrossfadeMusic(tensionMusic));
     }
 
     private void OnCinematicFinished()
@@ -116,6 +121,28 @@ public class GameManager : MonoBehaviour
         kidnapper.StopAttack();
         Debug.Log("[GameManager] GAME OVER");
         OnGameStateChanged?.Invoke(currentGameState);
+    }
+
+    private IEnumerator CrossfadeMusic(AudioClip newClip)
+    {
+        float startVolume = musicSource.volume;
+
+        for (float t = 0; t < musicFadeDuration; t += Time.deltaTime)
+        {
+            musicSource.volume = Mathf.Lerp(startVolume, 0f, t / musicFadeDuration);
+            yield return null;
+        }
+
+        musicSource.clip = newClip;
+        musicSource.Play();
+
+        for (float t = 0; t < musicFadeDuration; t += Time.deltaTime)
+        {
+            musicSource.volume = Mathf.Lerp(0f, startVolume, t / musicFadeDuration);
+            yield return null;
+        }
+
+        musicSource.volume = startVolume;
     }
 
     private void PoliceArrive()
