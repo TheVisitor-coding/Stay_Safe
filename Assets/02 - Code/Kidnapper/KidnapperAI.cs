@@ -26,6 +26,7 @@ public class KidnapperAI : MonoBehaviour
     private BarricadePoint[] _accessPoints;
     [SerializeField] private BarricadePoint firstAccessPoint;
     private Coroutine _attackCoroutine;
+    private float _currentForcingDuration;
 
     private NavMeshAgent agent;
 
@@ -38,6 +39,7 @@ public class KidnapperAI : MonoBehaviour
     public void Initialize(BarricadePoint[] accessPoints)
     {
         _accessPoints = accessPoints;
+        _currentForcingDuration = forcingDuration;
     }
 
     public void StartTutorialAttack()
@@ -100,9 +102,9 @@ public class KidnapperAI : MonoBehaviour
         yield return MoveToTarget(target.transform.position);
 
         forcingSource.Play();
-        timerGlitch.TriggerGlitchEffect(forcingDuration);
+        timerGlitch.TriggerGlitchEffect(_currentForcingDuration);
 
-        yield return new WaitForSeconds(forcingDuration);
+        yield return new WaitForSeconds(_currentForcingDuration);
         forcingSource.Stop();
 
         if (target.GetBarricadeState() == BarricadePoint.BarricadeState.Open)
@@ -114,8 +116,8 @@ public class KidnapperAI : MonoBehaviour
             yield break;
         }
 
-        forcingDuration = Mathf.Max(minimumForcingDuration, forcingDuration - difficultyReductionPerRound);
-        Debug.Log($"[Kidnapper] Repoussé — prochain forçage en {forcingDuration}s");
+        _currentForcingDuration = Mathf.Max(minimumForcingDuration, _currentForcingDuration - difficultyReductionPerRound);
+        Debug.Log($"[Kidnapper] Repoussé — prochain forçage en {_currentForcingDuration}s");
 
         _attackCoroutine = StartCoroutine(AttackCoroutine());
     }

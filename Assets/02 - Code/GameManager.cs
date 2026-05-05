@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private float musicFadeDuration = 2f;
     [SerializeField] private AudioSource yawnSFX;
+    [SerializeField] private AudioSource assaultAlertSFX;
+
+    private float _playingStartTime;
 
     public enum GameState { Intro, Exploration, Tutorial, Playing, Won, Lost }
 
@@ -61,7 +64,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentGameState == GameState.Playing)
         {
-            float timeRemaining = Mathf.Max(0, policeArrivalTime - Time.timeSinceLevelLoad);
+            float timeRemaining = Mathf.Max(0, policeArrivalTime - (Time.time - _playingStartTime));
             OnTimerUpdated?.Invoke(timeRemaining);
         }
     }
@@ -124,12 +127,14 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(currentGameState);
         kidnapper.Initialize(barricadePoints);
         kidnapper.StartAttack();
+        _playingStartTime = Time.time;
         Invoke(nameof(PoliceArrive), policeArrivalTime);
     }
 
     private void OnAttackStarted(BarricadePoint target)
     {
         Debug.Log($"[GameManager] Alerte sur {target.name}");
+        if (assaultAlertSFX != null) assaultAlertSFX.Play();
     }
 
     private void OnAccessBreached()
@@ -139,6 +144,10 @@ public class GameManager : MonoBehaviour
         );
         currentGameState = GameState.Lost;
         kidnapper.StopAttack();
+        CancelInvoke(nameof(PoliceArrive));
+        if (musicSource != null && musicSource.isPlaying) musicSource.Stop();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         Debug.Log("[GameManager] GAME OVER");
         OnGameStateChanged?.Invoke(currentGameState);
     }
@@ -170,6 +179,9 @@ public class GameManager : MonoBehaviour
         if (currentGameState != GameState.Playing) return;
         currentGameState = GameState.Won;
         kidnapper.StopAttack();
+        if (musicSource != null && musicSource.isPlaying) musicSource.Stop();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         Debug.Log("[GameManager] Victoire !");
         OnGameStateChanged?.Invoke(currentGameState);
     }

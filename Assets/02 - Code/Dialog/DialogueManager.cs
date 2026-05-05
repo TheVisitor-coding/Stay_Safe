@@ -149,7 +149,7 @@ public class DialogueManager : MonoBehaviour
                 EnqueuePriority(database.onVictory);
                 break;
             case GameManager.GameState.Lost:
-                Enqueue(database.onGameOver);
+                EnqueuePriority(database.onGameOver);
                 break;
         }
     }

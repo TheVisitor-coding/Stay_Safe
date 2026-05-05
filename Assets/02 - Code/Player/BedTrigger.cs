@@ -48,7 +48,7 @@ public class BedTrigger : MonoBehaviour
             return;
         }
 
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
         {
             if (hit.collider.CompareTag("Bed"))
