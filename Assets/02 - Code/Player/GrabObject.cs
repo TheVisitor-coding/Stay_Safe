@@ -17,6 +17,7 @@ public class GrabObject : MonoBehaviour
     private GameObject _grabbedObject;
     private BarricadePoint _currentBarricadePoint;
     private float _barricadeProgress = 0f;
+    private bool _firstPickupDone;
 
     void Update()
     {
@@ -89,6 +90,14 @@ public class GrabObject : MonoBehaviour
         _grabbedObject.GetComponent<Collider>().enabled = false;
         _grabbedObject.GetComponentInChildren<HintKey>()?.SetGrabbed(true);
         pickupAudioSource.Play();
+
+        if (!_firstPickupDone)
+        {
+            _firstPickupDone = true;
+            DialogueManager.Instance.Enqueue(
+                DialogueManager.Instance.Database.onFirstPickup
+            );
+        }
     }
 
     private void DropObject()

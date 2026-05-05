@@ -18,6 +18,7 @@ public class DialogueManager : MonoBehaviour
     private Queue<DialogueLine> _queue = new();
     private Coroutine _displayCoroutine;
     private bool _isPlaying;
+    private bool _lastMinuteTriggered;
 
     void Awake()
     {
@@ -28,11 +29,13 @@ public class DialogueManager : MonoBehaviour
     void OnEnable()
     {
         GameManager.OnGameStateChanged += OnGameStateChanged;
+        GameManager.OnTimerUpdated += OnTimerUpdated;
     }
 
     void OnDisable()
     {
         GameManager.OnGameStateChanged -= OnGameStateChanged;
+        GameManager.OnTimerUpdated -= OnTimerUpdated;
     }
 
     public void Enqueue(DialogueLine[] lines)
@@ -126,6 +129,15 @@ public class DialogueManager : MonoBehaviour
     //     dialogueCanvasGroup.alpha = 0;
     // }
 
+    private void OnTimerUpdated(float timeRemaining)
+    {
+        if (!_lastMinuteTriggered && timeRemaining <= 60f)
+        {
+            _lastMinuteTriggered = true;
+            Enqueue(database.onLastMinute);
+        }
+    }
+
     private void OnGameStateChanged(GameManager.GameState state)
     {
         switch (state)
@@ -137,7 +149,7 @@ public class DialogueManager : MonoBehaviour
                 EnqueuePriority(database.onVictory);
                 break;
             case GameManager.GameState.Lost:
-                EnqueuePriority(database.onGameOver);
+                Enqueue(database.onGameOver);
                 break;
         }
     }

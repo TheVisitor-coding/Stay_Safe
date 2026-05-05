@@ -145,6 +145,9 @@ public class KidnapperAI : MonoBehaviour
         forcingSource.Stop();
         _attackCoroutine = null;
         Debug.Log("[Kidnapper] Repoussé au tutoriel");
+        DialogueManager.Instance.Enqueue(
+            DialogueManager.Instance.Database.onFirstBarricadeSuccess
+        );
         OnTutorialCompleted?.Invoke();
     }
 

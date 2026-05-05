@@ -134,6 +134,9 @@ public class GameManager : MonoBehaviour
 
     private void OnAccessBreached()
     {
+        DialogueManager.Instance.EnqueuePriority(
+            DialogueManager.Instance.Database.onAccessBreached
+        );
         currentGameState = GameState.Lost;
         kidnapper.StopAttack();
         Debug.Log("[GameManager] GAME OVER");

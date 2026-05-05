@@ -1722,6 +1722,7 @@ MonoBehaviour:
 '
     displayDuration: 10
     delayBefore: 2
+  onFirstPickup: []
   onTutorialStart:
   - text: "Mais la nuit fut de courte dur\xE9e"
     displayDuration: 5
@@ -1748,6 +1749,7 @@ MonoBehaviour:
     delayBefore: 1
   onBarricadeBreached: []
   onAccessBreached: []
+  onLastMinute: []
   onVictory: []
   onGameOver: []
 --- !u!4 &138523323

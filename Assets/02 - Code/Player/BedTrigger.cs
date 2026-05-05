@@ -42,6 +42,12 @@ public class BedTrigger : MonoBehaviour
 
     private void HandleIdle()
     {
+        if (GameManager.Instance.GetGameState() != GameManager.GameState.Exploration)
+        {
+            keypressHint.SetActive(false);
+            return;
+        }
+
         Ray ray = new Ray(transform.position, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance))
         {
