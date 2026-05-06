@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameState currentGameState;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private BarricadePoint[] barricadePoints;
+    [SerializeField] private BarricadePoint firstAccessPoint;
     [SerializeField] private KidnapperAI kidnapper;
     [SerializeField] private float policeArrivalTime = 300f;
     [SerializeField] private AudioSource introMusicSource;
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
         KidnapperAI.OnTutorialCompleted += OnTutorialCompleted;
         TutorialManager.OnTutorialCinematicFinished += OnCinematicFinished;
         BedTrigger.OnPlayerWokeUp += OnPlayerWokeUp;
+        BarricadePoint.OnBarricaded += OnBarricadePointSecured;
     }
 
     void OnDestroy()
@@ -87,6 +89,7 @@ public class GameManager : MonoBehaviour
         KidnapperAI.OnTutorialCompleted -= OnTutorialCompleted;
         TutorialManager.OnTutorialCinematicFinished -= OnCinematicFinished;
         BedTrigger.OnPlayerWokeUp -= OnPlayerWokeUp;
+        BarricadePoint.OnBarricaded -= OnBarricadePointSecured;
     }
 
     void Start()
@@ -94,6 +97,18 @@ public class GameManager : MonoBehaviour
         currentGameState = GameState.Intro;
         Debug.Log($"[GameManager] Game state: {currentGameState}");
         OnGameStateChanged?.Invoke(currentGameState);
+
+        foreach (BarricadePoint bp in barricadePoints)
+        {
+            Collider col = bp.GetComponent<Collider>();
+            if (col != null) col.enabled = false;
+        }
+
+        if (firstAccessPoint != null)
+        {
+            Collider firstCol = firstAccessPoint.GetComponent<Collider>();
+            if (firstCol != null) firstCol.enabled = true;
+        }
     }
 
     void Update()
@@ -161,6 +176,13 @@ public class GameManager : MonoBehaviour
         currentGameState = GameState.Playing;
         Debug.Log($"[GameManager] Game state: {currentGameState}");
         OnGameStateChanged?.Invoke(currentGameState);
+
+        foreach (BarricadePoint bp in barricadePoints)
+        {
+            Collider col = bp.GetComponent<Collider>();
+            if (col != null) col.enabled = true;
+        }
+
         kidnapper.Initialize(barricadePoints);
         kidnapper.StartAttack();
         _playingStartTime = Time.time;
@@ -171,6 +193,35 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"[GameManager] Alerte sur {target.name}");
         if (assaultAlertSFX != null) assaultAlertSFX.Play();
+    }
+
+    private void OnBarricadePointSecured(BarricadePoint point)
+    {
+        if (currentGameState != GameState.Playing) return;
+        if (!AreAllBarricaded()) return;
+
+        Debug.Log("[GameManager] Toutes les barricades sont en place — victoire anticipée");
+        CancelInvoke(nameof(PoliceArrive));
+        kidnapper.StopAttack();
+        DialogueManager.Instance.EnqueuePriority(
+            DialogueManager.Instance.Database.onAllBarricaded
+        );
+        StartCoroutine(EarlyVictoryAfterDialogue());
+    }
+
+    private bool AreAllBarricaded()
+    {
+        foreach (BarricadePoint bp in barricadePoints)
+        {
+            if (bp.GetBarricadeState() == BarricadePoint.BarricadeState.Open) return false;
+        }
+        return true;
+    }
+
+    private IEnumerator EarlyVictoryAfterDialogue()
+    {
+        yield return new WaitForSeconds(3f);
+        PoliceArrive();
     }
 
     private void OnAccessBreached()

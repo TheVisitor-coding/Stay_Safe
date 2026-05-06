@@ -19,6 +19,7 @@ public class DialogueManager : MonoBehaviour
     private Coroutine _displayCoroutine;
     private bool _isPlaying;
     private bool _lastMinuteTriggered;
+    private DialogueLine[] _pendingPriorityLines;
 
     void Awake()
     {
@@ -53,12 +54,15 @@ public class DialogueManager : MonoBehaviour
     public void EnqueuePriority(DialogueLine[] lines)
     {
         Debug.Log($"[DialogueManager] EnqueuePriority {lines.Length} lines");
-        if (_displayCoroutine != null)
-            StopCoroutine(_displayCoroutine);
+        if (lines == null || lines.Length == 0) return;
+
+        if (_isPlaying)
+        {
+            _pendingPriorityLines = lines;
+            return;
+        }
 
         _queue.Clear();
-        _isPlaying = false;
-
         Enqueue(lines);
     }
 
@@ -73,14 +77,23 @@ public class DialogueManager : MonoBehaviour
                 var line = _queue.Dequeue();
 
                 if (line.delayBefore > 0)
-                    yield return new WaitForSeconds(line.delayBefore);
+                    yield return new WaitForSecondsRealtime(line.delayBefore);
 
                 yield return StartCoroutine(DisplayLine(line));
+
+                if (_pendingPriorityLines != null)
+                {
+                    _queue.Clear();
+                    foreach (var pendingLine in _pendingPriorityLines)
+                        _queue.Enqueue(pendingLine);
+                    _pendingPriorityLines = null;
+                }
             }
         }
         finally
         {
             _isPlaying = false;
+            _displayCoroutine = null;
             dialogueText.text = string.Empty;
         }
     }
@@ -96,11 +109,11 @@ public class DialogueManager : MonoBehaviour
             if (typewriterAudioSource != null && typewriterAudioSource.clip != null && c != ' ')
                 typewriterAudioSource.PlayOneShot(typewriterAudioSource.clip);
 
-            yield return new WaitForSeconds(typewriterSpeed);
+            yield return new WaitForSecondsRealtime(typewriterSpeed);
         }
 
         // yield return StartCoroutine(FadeIn());
-        yield return new WaitForSeconds(line.displayDuration);
+        yield return new WaitForSecondsRealtime(line.displayDuration);
 
         dialogueText.text = string.Empty;
     }

@@ -15,6 +15,7 @@ public class DialogueDatabase : MonoBehaviour
     public DialogueLine[] onBarricadeBreached;
     public DialogueLine[] onAccessBreached;
     public DialogueLine[] onLastMinute;
+    public DialogueLine[] onAllBarricaded;
 
     [Header("Fin")]
     public DialogueLine[] onVictory;
