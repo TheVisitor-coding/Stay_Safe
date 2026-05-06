@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: da035975c9dda4ccea14fb164a4c9de9, type: 2}
+  m_LightingDataAsset: {fileID: 112000004, guid: 4d65ad76a0b129d4989148e650177daf, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -7419,11 +7419,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 596266900448104755, guid: 4dc539b2340586a499fa3a489ba78b03, type: 3}
   m_PrefabInstance: {fileID: 504265097}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &505603047 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4148102510689067199, guid: a7ee444d403de4a27bffe0686a0937d9, type: 3}
-  m_PrefabInstance: {fileID: 5250422630385229008}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &510764946
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8223,38 +8218,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542100076}
   m_CullTransparentMesh: 1
---- !u!1 &542454120
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 542454121}
-  m_Layer: 0
-  m_Name: AudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &542454121
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 542454120}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 505603047}
-  m_Father: {fileID: 143271431}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &545887148
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39302,7 +39265,6 @@ SceneRoots:
   - {fileID: 678835314}
   - {fileID: 1464011511}
   - {fileID: 330487483}
-  - {fileID: 143271431}
   - {fileID: 8642062379482644840}
   - {fileID: 1037677944}
   - {fileID: 655829546}
