@@ -6,6 +6,7 @@ TagManager:
   tags:
   - canPickUp
   - BarricadePoint
+  - Bed
   layers:
   - Default
   - TransparentFX

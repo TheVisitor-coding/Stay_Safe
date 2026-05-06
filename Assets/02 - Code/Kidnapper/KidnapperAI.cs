@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class KidnapperAI : MonoBehaviour
 {
@@ -10,23 +11,53 @@ public class KidnapperAI : MonoBehaviour
     [SerializeField] private float forcingDuration = 8f;
     [SerializeField] private float minimumForcingDuration = 2f;
     [SerializeField] private float difficultyReductionPerRound = 0.5f;
+    [SerializeField] private PoliceTimer timerGlitch;
 
     [Header("Déplacement & Audio")]
     [SerializeField] private float moveSpeed = 3f;
-    [SerializeField] private float minimumTravelDuration = 2f;
     [SerializeField] private AudioSource footstepsSource;
     [SerializeField] private AudioSource forcingSource;
 
     public static event Action OnAccessBreached;
     public static event Action<BarricadePoint> OnAttackStarted;
+    public static event Action OnTutorialAttackStarted;
+    public static event Action OnTutorialCompleted;
 
     private BarricadePoint[] _accessPoints;
-    private bool _isActive = false;
+    [SerializeField] private BarricadePoint firstAccessPoint;
     private Coroutine _attackCoroutine;
+    private float _currentForcingDuration;
+
+    private NavMeshAgent agent;
+
+    void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        agent.speed = moveSpeed;
+    }
 
     public void Initialize(BarricadePoint[] accessPoints)
     {
         _accessPoints = accessPoints;
+        _currentForcingDuration = forcingDuration;
+    }
+
+    public void StartTutorialAttack()
+    {
+        if (firstAccessPoint == null)
+        {
+            Debug.LogError("[KidnapperAI] Aucun point d'accès assigné pour le tutoriel.");
+            return;
+        }
+
+        if (_attackCoroutine != null) return;
+
+        _attackCoroutine = StartCoroutine(TutorialApproachCoroutine());
+    }
+
+    public void StartTutorialForcing()
+    {
+        _attackCoroutine = StartCoroutine(TutorialForcingCoroutine());
     }
 
     public void StartAttack()
@@ -37,15 +68,13 @@ public class KidnapperAI : MonoBehaviour
             return;
         }
 
-        if (_isActive) return;
+        if (_attackCoroutine != null) return;
 
-        _isActive = true;
         _attackCoroutine = StartCoroutine(AttackCoroutine());
     }
 
     public void StopAttack()
     {
-        _isActive = false;
         StopAudio();
 
         if (_attackCoroutine != null)
@@ -57,59 +86,82 @@ public class KidnapperAI : MonoBehaviour
 
     private IEnumerator AttackCoroutine()
     {
-        while (_isActive)
+        yield return new WaitForSeconds(delayBetweenRounds);
+
+        BarricadePoint target = GetRandomOpenAccessPoint();
+
+        if (target == null)
         {
-            yield return new WaitForSeconds(delayBetweenRounds);
-
-            BarricadePoint target = GetRandomOpenAccessPoint();
-            if (target == null) continue;
-
-            OnAttackStarted?.Invoke(target);
-            Debug.Log($"[Kidnapper] Cible : {target.name}");
-
-            // Phase 1 : déplacement vers le point d'accès
-            yield return MoveToTarget(target.transform.position);
-
-            // Phase 2 : forçage de l'accès — la source audio est positionnée sur le point attaqué
-            forcingSource.transform.position = target.transform.position;
-            Debug.Log($"[Kidnapper] Forçage de {target.name} — {forcingDuration}s pour barricader");
-            forcingSource.Play();
-            Debug.Log($"[Kidnapper] Audio de forçage activé", forcingSource);
-            yield return new WaitForSeconds(forcingDuration);
-            forcingSource.Stop();
-
-            // Phase 3 : résultat
-            if (target.GetBarricadeState() == BarricadePoint.BarricadeState.Open)
-            {
-                _isActive = false;
-                Debug.Log("[Kidnapper] Accès forcé — défaite");
-                OnAccessBreached?.Invoke();
-                yield break;
-            }
-
-            forcingDuration = Mathf.Max(minimumForcingDuration, forcingDuration - difficultyReductionPerRound);
-            Debug.Log($"[Kidnapper] Repoussé — prochain forçage en {forcingDuration}s");
+            _attackCoroutine = null;
+            yield break;
         }
+
+        OnAttackStarted?.Invoke(target);
+        Debug.Log($"[Kidnapper] Cible : {target.name}");
+
+        yield return MoveToTarget(target.transform.position);
+
+        forcingSource.Play();
+        timerGlitch.TriggerGlitchEffect(_currentForcingDuration);
+
+        yield return new WaitForSeconds(_currentForcingDuration);
+        forcingSource.Stop();
+
+        if (target.GetBarricadeState() == BarricadePoint.BarricadeState.Open)
+        {
+            _attackCoroutine = null;
+            agent.isStopped = true;
+            Debug.Log("[Kidnapper] Accès forcé — défaite");
+            OnAccessBreached?.Invoke();
+            yield break;
+        }
+
+        _currentForcingDuration = Mathf.Max(minimumForcingDuration, _currentForcingDuration - difficultyReductionPerRound);
+        Debug.Log($"[Kidnapper] Repoussé — prochain forçage en {_currentForcingDuration}s");
+
+        _attackCoroutine = StartCoroutine(AttackCoroutine());
+    }
+
+    private IEnumerator TutorialApproachCoroutine()
+    {
+        OnAttackStarted?.Invoke(firstAccessPoint);
+        Debug.Log($"[Kidnapper] Cible tutoriel : {firstAccessPoint.name}");
+
+        yield return MoveToTarget(firstAccessPoint.transform.position);
+
+        _attackCoroutine = null;
+        forcingSource.Play();
+        OnTutorialAttackStarted?.Invoke();
+        DialogueManager.Instance.EnqueuePriority(
+            DialogueManager.Instance.Database.onFirstAttack
+        );
+    }
+
+    private IEnumerator TutorialForcingCoroutine()
+    {
+        while (firstAccessPoint.GetBarricadeState() == BarricadePoint.BarricadeState.Open)
+        {
+            yield return null;
+        }
+
+        forcingSource.Stop();
+        _attackCoroutine = null;
+        Debug.Log("[Kidnapper] Repoussé au tutoriel");
+        DialogueManager.Instance.Enqueue(
+            DialogueManager.Instance.Database.onFirstBarricadeSuccess
+        );
+        OnTutorialCompleted?.Invoke();
     }
 
     private IEnumerator MoveToTarget(Vector3 destination)
     {
         footstepsSource.Play();
-        Debug.Log($"[Kidnapper] Audio de déplacement activé", footstepsSource);
 
-        Vector3 startPosition = transform.position;
-        float distance = Vector3.Distance(startPosition, destination);
-        float travelDuration = Mathf.Max(distance / moveSpeed, minimumTravelDuration);
-        float elapsed = 0f;
-
-        while (elapsed < travelDuration)
+        agent.SetDestination(destination);
+        while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
         {
-            elapsed += Time.deltaTime;
-            transform.position = Vector3.Lerp(startPosition, destination, elapsed / travelDuration);
             yield return null;
         }
-
-        transform.position = destination;
         footstepsSource.Stop();
     }
 
@@ -128,7 +180,6 @@ public class KidnapperAI : MonoBehaviour
 
     private void StopAudio()
     {
-        Debug.Log("[Kidnapper] Arrêt des sons");
         if (footstepsSource != null && footstepsSource.isPlaying) footstepsSource.Stop();
         if (forcingSource != null && forcingSource.isPlaying) forcingSource.Stop();
     }

@@ -10,18 +10,23 @@ public class GrabObject : MonoBehaviour
     [SerializeField] private GameObject keypressHint;
     [SerializeField] private float barricadeTime = 2f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource barricadeAudioSource;
+    [SerializeField] private AudioSource pickupAudioSource;
+
     private GameObject _grabbedObject;
     private BarricadePoint _currentBarricadePoint;
     private float _barricadeProgress = 0f;
+    private bool _firstPickupDone;
 
     void Update()
     {
         Vector3 rayOrigin = playerCamera.transform.position;
         Vector3 rayDirection = playerCamera.transform.forward;
 
-        Debug.DrawRay(rayOrigin, rayDirection * grabDistance, Color.green);
-
-        bool canBarricade = _grabbedObject != null && _currentBarricadePoint != null && GameManager.Instance.GetGameState() == GameManager.GameState.Playing;
+        GameManager.GameState state = GameManager.Instance.GetGameState();
+        bool canBarricade = _grabbedObject != null && _currentBarricadePoint != null
+            && (state == GameManager.GameState.Playing || state == GameManager.GameState.Tutorial);
 
         // Cas 1 : hold E pour barricader
         if (canBarricade && Input.GetKey(KeyCode.E))
@@ -32,7 +37,10 @@ public class GrabObject : MonoBehaviour
             barricadeProgressBar.value = _barricadeProgress / barricadeTime;
 
             if (_barricadeProgress >= barricadeTime)
+            {
+                barricadeAudioSource.Play();
                 CompleteBarricade();
+            }
 
             return;
         }
@@ -46,7 +54,7 @@ public class GrabObject : MonoBehaviour
         }
 
         // Cas 3 : appui simple E — ramasser ou poser librement
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && (state == GameManager.GameState.Playing || state == GameManager.GameState.Tutorial))
         {
             if (_grabbedObject == null)
                 PickUpObject(rayOrigin, rayDirection);
@@ -80,6 +88,16 @@ public class GrabObject : MonoBehaviour
         _grabbedObject.transform.localPosition = Vector3.zero;
         _grabbedObject.transform.localRotation = Quaternion.identity;
         _grabbedObject.GetComponent<Collider>().enabled = false;
+        _grabbedObject.GetComponentInChildren<HintKey>()?.SetGrabbed(true);
+        pickupAudioSource.Play();
+
+        if (!_firstPickupDone)
+        {
+            _firstPickupDone = true;
+            DialogueManager.Instance.Enqueue(
+                DialogueManager.Instance.Database.onFirstPickup
+            );
+        }
     }
 
     private void DropObject()
@@ -88,6 +106,7 @@ public class GrabObject : MonoBehaviour
         rb.isKinematic = false;
         _grabbedObject.transform.SetParent(null);
         _grabbedObject.GetComponent<Collider>().enabled = true;
+        _grabbedObject.GetComponentInChildren<HintKey>()?.SetGrabbed(false);
         _grabbedObject = null;
     }
 

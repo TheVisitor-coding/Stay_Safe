@@ -1,5 +1,72 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5308993504728973168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1275356291980427726}
+  - component: {fileID: 4848249485383552477}
+  - component: {fileID: 6014240035680000167}
+  m_Layer: 0
+  m_Name: Zone_Trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1275356291980427726
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5308993504728973168}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1418576030345923773}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4848249485383552477
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5308993504728973168}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6.05947, y: 1, z: 7.013052}
+  m_Center: {x: 0.12228143, y: 0, z: -0.2915187}
+--- !u!114 &6014240035680000167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5308993504728973168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350bdde7863b04e328d015938cd14acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HintKey
+  keypressHint: {fileID: 0}
 --- !u!1 &7892171866690981571
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,6 +102,7 @@ Transform:
   - {fileID: 6346812810863573803}
   - {fileID: 6904737829661486892}
   - {fileID: 8493250529703032919}
+  - {fileID: 1275356291980427726}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &8162291928318958884
@@ -79,12 +147,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.831834, y: 0.2974229, z: 4.165087}
-  m_Center: {x: 0.18273944, y: 0.08029103, z: 0.051089525}
+  m_Size: {x: 2.0291786, y: 0.2974229, z: 3.757918}
+  m_Center: {x: 0.2376442, y: 0.08029103, z: 0.114403784}
 --- !u!114 &5052476657844807005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,6 +168,11 @@ MonoBehaviour:
   playerCamera: {fileID: 0}
   grabDistance: 2
   holdPosition: {fileID: 0}
+  barricadeProgressBar: {fileID: 0}
+  keypressHint: {fileID: 0}
+  barricadeTime: 2
+  barricadeAudioSource: {fileID: 0}
+  pickupAudioSource: {fileID: 0}
 --- !u!1001 &5797646250894568213
 PrefabInstance:
   m_ObjectHideFlags: 0
