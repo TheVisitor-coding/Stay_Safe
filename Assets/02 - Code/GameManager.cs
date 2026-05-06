@@ -179,14 +179,16 @@ public class GameManager : MonoBehaviour
         DialogueManager.Instance.EnqueuePriority(
             DialogueManager.Instance.Database.onAccessBreached
         );
+        Debug.Log("[GameManager] Accès compromis — lancement séquence de game over");
         currentGameState = GameState.Lost;
         kidnapper.StopAttack();
         CancelInvoke(nameof(PoliceArrive));
         if (musicSource != null && musicSource.isPlaying) musicSource.Stop();
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        Debug.Log("[GameManager] GAME OVER");
         OnGameStateChanged?.Invoke(currentGameState);
+        Debug.Log("[GameManager] Lancement séquence de game over");
+        StartCoroutine(GameOverSequence());
     }
 
     private IEnumerator CrossfadeMusic(AudioClip newClip)
@@ -210,7 +212,6 @@ public class GameManager : MonoBehaviour
 
         musicSource.volume = startVolume;
         
-        StartCoroutine(GameOverSequence());
     }
 
     private System.Collections.IEnumerator GameOverSequence()
@@ -302,6 +303,7 @@ public class GameManager : MonoBehaviour
             {
                 if(houseLights[i] != null) 
                 {
+                    Debug.Log($"[GameManager] Adjusting light {houseLights[i].name} intensity: {houseLights[i].intensity} -> {Mathf.Lerp(startIntensities[i], normalLightIntensity, progress)}");
                     houseLights[i].intensity = Mathf.Lerp(startIntensities[i], normalLightIntensity, progress);
                 }
             }
