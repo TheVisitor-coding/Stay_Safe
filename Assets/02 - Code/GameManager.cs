@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BarricadePoint[] barricadePoints;
     [SerializeField] private KidnapperAI kidnapper;
     [SerializeField] private float policeArrivalTime = 300f;
+    [SerializeField] private AudioSource introMusicSource;
 
     [Header("Game Over Settings")]
     public TextMeshProUGUI gameOverText;
@@ -30,6 +31,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private AudioSource victoryMusicSource;
     [SerializeField] private Light[] houseLights;
     [SerializeField] private float normalLightIntensity = 1.5f;
+
+    // TEMPORAIRE — pour tester, à supprimer ensuite
+    [ContextMenu("Test Game Over")]
+    public void DEBUG_GameOver()
+    {
+        currentGameState = GameState.Playing; // force l'état
+        OnAccessBreached();
+    }
+
+    [ContextMenu("Test You Win")]
+    public void DEBUG_YouWin()
+    {
+        currentGameState = GameState.Playing; // bypass le guard
+        PoliceArrive();
+    }
 
     public enum GameState { Intro, Exploration, Tutorial, Playing, Won, Lost }
     public static event Action<float> OnTimerUpdated;
@@ -118,6 +134,10 @@ public class GameManager : MonoBehaviour
 
     private System.Collections.IEnumerator GameOverSequence()
     {
+        foreach (AudioSource source in GetComponents<AudioSource>())
+        {
+            source.Stop();
+        }
         if (creepyMusicSource != null)
         {
             creepyMusicSource.volume = 0f;
@@ -177,6 +197,10 @@ public class GameManager : MonoBehaviour
             
         }
 
+        foreach (AudioSource source in GetComponents<AudioSource>())
+        {
+            source.Stop();
+        }
         if (victoryMusicSource != null)
         {
         victoryMusicSource.volume = 0f;
@@ -211,6 +235,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        Debug.Log("[GameManager] RestartGame appelé !"); // ← temporaire
         Time.timeScale = 1f;
 
         if (creepyMusicSource != null)
