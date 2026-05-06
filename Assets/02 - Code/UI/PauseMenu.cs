@@ -12,7 +12,6 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
-        resumeButton.onClick.AddListener(Resume);
         pauseMenuCanvas.SetActive(false);
     }
 

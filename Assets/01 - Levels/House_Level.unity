@@ -1269,60 +1269,60 @@ MonoBehaviour:
   - text: "\u2026 Quelle heure il est ?"
     displayDuration: 2
     delayBefore: 2
-  - text: "J'ai d\xFB m'endormir devant la t\xE9l\xE9."
+  - text: "Ugh.. J'ai d\xFB m'endormir devant la t\xE9l\xE9...."
     displayDuration: 2
     delayBefore: 2
-  - text: Je devrais aller dormir
+  - text: Je devrais aller dormir...
     displayDuration: 5
     delayBefore: 2
   onFirstPickup:
-  - text: "C'est pas grand-chose, mais \xE7a devrait faire l'affaire"
+  - text: "C'est pas grand-chose, mais \xE7a devrait faire l'affaire..."
     displayDuration: 2
     delayBefore: 1
   onTutorialStart:
-  - text: "Le sommeil a tenu deux heures. Peut-\xEAtre trois."
+  - text: "Zzz... J'ai d\xFB dormir deux heures... Peut-\xEAtre trois..."
     displayDuration: 3
     delayBefore: 2
-  - text: Au fond, je savais qu'il reviendrait.
+  - text: Zzz... Au fond, je savais qu'il reviendrait...
     displayDuration: 3
     delayBefore: 2
   onFirstAttack:
-  - text: "C'\xE9tait quoi."
+  - text: "C'\xE9tait quoi ?!"
     displayDuration: 2
     delayBefore: 0
-  - text: Non non non, y'a quelqu'un dehors.
+  - text: Non non non ! Il y'a quelqu'un dehors !
     displayDuration: 2
     delayBefore: 1
-  - text: La porte. Il faut bloquer la porte.
+  - text: La porte ! Il faut bloquer la porte !
     displayDuration: 2
     delayBefore: 1
   onFirstBarricadeSuccess:
   - text: "Tiens bon\u2026 tiens bon\u2026"
     displayDuration: 3
     delayBefore: 1
-  - text: "Ok. Ok \xE7a tient."
+  - text: "Ok... Ok \xE7a tient !"
     displayDuration: 3
     delayBefore: 1
-  - text: Vite les autres portes
+  - text: Vite les autres portes !
     displayDuration: 3
     delayBefore: 1
   onBarricadeBreached: []
   onAccessBreached:
-  - text: "Il est rentr\xE9."
+  - text: "Il est rentr\xE9 ?!"
     displayDuration: 2
     delayBefore: 1
-  - text: Il est dans la maison.
+  - text: Il est dans la maison !
     displayDuration: 2
     delayBefore: 1
   onLastMinute:
-  - text: Encore un peu. Juste encore un peu.
+  - text: Encore un peu... Juste encore un peu...
     displayDuration: 2
     delayBefore: 1
   onAllBarricaded:
-  - text: "Toutes les entr\xE9es sont barricad\xE9es"
+  - text: "Toutes les entr\xE9es sont barricad\xE9es !"
     displayDuration: 2
     delayBefore: 0
-  - text: "C'est termin\xE9"
+  - text: "C'est termin\xE9... !"
     displayDuration: 2
     delayBefore: 1
   onVictory:
@@ -1332,7 +1332,7 @@ MonoBehaviour:
   - text: ...
     displayDuration: 2
     delayBefore: 1
-  - text: C'est fini.
+  - text: C'est fini !
     displayDuration: 2
     delayBefore: 1
   - text: "Ti\xE9 le boss"
@@ -1342,7 +1342,7 @@ MonoBehaviour:
   - text: Matthieu..
     displayDuration: 2
     delayBefore: 1
-  - text: "Ti\xE9 un tigre"
+  - text: "Ti\xE9 un tigre !"
     displayDuration: 2
     delayBefore: 1
 --- !u!4 &138523323
@@ -1483,7 +1483,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 143271428}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd0e394fbbf534b498a50ad174d11fa8, type: 3}
   m_Name: 
@@ -2574,7 +2574,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Restart
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
   m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2641,7 +2641,7 @@ MonoBehaviour:
   m_margin: {x: 0.75577545, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &255917690
@@ -3264,6 +3264,14 @@ PrefabInstance:
     - target: {fileID: 8769797446737679862, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
       propertyPath: m_text
       value: Appuyer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769797446737679862, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+    - target: {fileID: 8769797446737679862, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9116168953923551810, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4266,7 +4274,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 386554665}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 143271434}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: Resume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &386554665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4280,7 +4300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5591,8 +5611,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: POLICE - ETA
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
-  m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+  m_sharedMaterial: {fileID: 5646217612714493572, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7022,7 +7042,7 @@ MonoBehaviour:
   pauseBetweenLines: 1.5
   fadeOutDuration: 1
   delayBeforeFade: 1
-  skipIntro: 1
+  skipIntro: 0
   typewriterAudioSource: {fileID: 0}
 --- !u!1 &672001209
 GameObject:
@@ -7706,9 +7726,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -7775,7 +7795,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &719987533
@@ -8507,7 +8527,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: You Win !
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
   m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -8574,7 +8594,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &762640815
@@ -11046,8 +11066,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Signal
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
-  m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+  m_sharedMaterial: {fileID: 5646217612714493572, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -14355,6 +14375,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -50
       objectReference: {fileID: 0}
+    - target: {fileID: 8769797446737679862, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+    - target: {fileID: 8769797446737679862, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9116168953923551810, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -14804,6 +14832,18 @@ PrefabInstance:
     - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
       propertyPath: m_text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5646217612714493572, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18510,6 +18550,14 @@ PrefabInstance:
       propertyPath: m_text
       value: Appuyer
       objectReference: {fileID: 0}
+    - target: {fileID: 8769797446737679862, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+    - target: {fileID: 8769797446737679862, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9116168953923551810, guid: 3c6e8512b546b4ce7a75b9c386442f66, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -21416,6 +21464,18 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 5646217612714493572, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22444,8 +22504,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '04 : 12'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
-  m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
+  m_sharedMaterial: {fileID: 5646217612714493572, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -23089,7 +23149,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Game Over
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e0ebb3ab71644c5db6f70fc7732d889, type: 2}
   m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -23156,7 +23216,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 4.093689, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2075215118
