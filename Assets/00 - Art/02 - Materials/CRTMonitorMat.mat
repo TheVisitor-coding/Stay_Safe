@@ -115,7 +115,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _GlitchIntensity: 0.4491678
+    - _GlitchIntensity: 0
     - _GlitchSpeed: 10
     - _GlossMapScale: 0
     - _Glossiness: 0

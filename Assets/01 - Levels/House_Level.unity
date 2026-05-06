@@ -1812,11 +1812,11 @@ Transform:
   m_GameObject: {fileID: 136764106}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069839, y: -0, z: -0, w: 0.7072297}
-  m_LocalPosition: {x: -122.671, y: 4.390001, z: 7.9330006}
+  m_LocalPosition: {x: -4.6809998, y: 0.020000935, z: -0.37699986}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1535716936}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &138523321
 GameObject:
@@ -1851,77 +1851,77 @@ MonoBehaviour:
   - text: "\u2026 Quelle heure il est ?"
     displayDuration: 2
     delayBefore: 2
-  - text: "J'ai d\xFB m'endormir devant la t\xE9l\xE9."
+  - text: "Ugh... J'ai d\xFB m'endormir devant la t\xE9l\xE9..."
     displayDuration: 2
     delayBefore: 2
-  - text: Je devrais aller dormir
+  - text: Je devrais aller dormir...
     displayDuration: 5
     delayBefore: 2
   onFirstPickup:
-  - text: "C'est pas grand-chose, mais \xE7a devrait faire l'affaire"
+  - text: "C'est pas grand-chose, mais \xE7a devrait faire l'affaire..."
     displayDuration: 2
     delayBefore: 1
   onTutorialStart:
-  - text: "Le sommeil a tenu deux heures. Peut-\xEAtre trois."
+  - text: "Zzz... J'ai d\xFB dormir deux heures... Peut-\xEAtre trois..."
     displayDuration: 3
     delayBefore: 2
-  - text: Au fond, je savais qu'il reviendrait.
+  - text: Zzz... Au fond, je savais qu'il reviendrait...
     displayDuration: 3
     delayBefore: 2
   onFirstAttack:
-  - text: "C'\xE9tait quoi."
+  - text: "C'\xE9tait quoi ?!"
     displayDuration: 2
     delayBefore: 0
-  - text: Non non non, y'a quelqu'un dehors.
+  - text: Non non non ! Il y a quelqu'un dehors !
     displayDuration: 2
     delayBefore: 1
-  - text: La porte. Il faut bloquer la porte.
+  - text: La porte ! Il faut bloquer la porte !
     displayDuration: 2
     delayBefore: 1
   onFirstBarricadeSuccess:
   - text: "Tiens bon\u2026 tiens bon\u2026"
     displayDuration: 3
     delayBefore: 1
-  - text: "Ok. Ok \xE7a tient."
+  - text: "Ok... Ok \xE7a tient !"
     displayDuration: 3
     delayBefore: 1
-  - text: Vite les autres portes
+  - text: Vite les autres portes !
     displayDuration: 3
     delayBefore: 1
   onBarricadeBreached: []
   onAccessBreached:
-  - text: "Il est rentr\xE9."
+  - text: "Il est rentr\xE9 ?!"
     displayDuration: 2
     delayBefore: 1
-  - text: Il est dans la maison.
+  - text: Il est dans la maison !
     displayDuration: 2
     delayBefore: 1
   onLastMinute:
-  - text: Encore un peu. Juste encore un peu.
+  - text: Encore un peu... Juste encore un peu...
     displayDuration: 2
     delayBefore: 1
   onAllBarricaded:
-  - text: "Toutes les entr\xE9es sont barricad\xE9es"
+  - text: "Toutes les entr\xE9es sont barricad\xE9es !"
     displayDuration: 2
     delayBefore: 0
-  - text: "C'est termin\xE9"
+  - text: "C'est termin\xE9... ! "
     displayDuration: 2
     delayBefore: 1
   onVictory:
-  - text: C'est fini.
+  - text: C'est fini
     displayDuration: 2
     delayBefore: 1
   - text: ...
     displayDuration: 2
     delayBefore: 1
-  - text: C'est fini.
+  - text: C'est fini !
     displayDuration: 2
     delayBefore: 1
   onGameOver:
-  - text: Matthieu..
+  - text: Matthieu...
     displayDuration: 2
     delayBefore: 1
-  - text: "Ti\xE9 un tigre"
+  - text: "Ti\xE9 un tigre !"
     displayDuration: 2
     delayBefore: 1
 --- !u!4 &138523323
@@ -3804,7 +3804,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Restart
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0c54a37a2e8538d4fa62bdb69607f5be, type: 2}
   m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3871,7 +3871,7 @@ MonoBehaviour:
   m_margin: {x: 0.75577545, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &255917690
@@ -7196,11 +7196,11 @@ Transform:
   m_GameObject: {fileID: 451662805}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -111.812, y: 1.947, z: 5.2120004}
+  m_LocalPosition: {x: 6.1780014, y: -2.4229999, z: -3.098}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1535716936}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &453367713
 GameObject:
@@ -7323,11 +7323,11 @@ Transform:
   m_GameObject: {fileID: 453367713}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069839, y: -0, z: -0, w: 0.7072297}
-  m_LocalPosition: {x: -116.579994, y: 4.28, z: 6.3900003}
+  m_LocalPosition: {x: 1.4100037, y: -0.089999676, z: -1.9200001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1535716936}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &464145725
 PrefabInstance:
@@ -7834,11 +7834,11 @@ Transform:
   m_GameObject: {fileID: 492145513}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069839, y: -0, z: -0, w: 0.7072297}
-  m_LocalPosition: {x: -127.72, y: 4.390001, z: 7.9330006}
+  m_LocalPosition: {x: -9.730003, y: 0.020000935, z: -0.37699986}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1535716936}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &495941676
 GameObject:
@@ -8432,11 +8432,11 @@ Transform:
   m_GameObject: {fileID: 517402935}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069839, y: -0, z: -0, w: 0.7072297}
-  m_LocalPosition: {x: -122.967995, y: 4.390001, z: 3.6700006}
+  m_LocalPosition: {x: -4.977997, y: 0.020000935, z: -4.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1535716936}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &524390862
 PrefabInstance:
@@ -9555,11 +9555,11 @@ Transform:
   m_GameObject: {fileID: 606452424}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7069839, y: -0, z: -0, w: 0.7072297}
-  m_LocalPosition: {x: -113.11, y: 3.56, z: 13.130001}
+  m_LocalPosition: {x: 4.8799973, y: -0.80999994, z: 4.8200006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1535716936}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &608356021
 PrefabInstance:
@@ -13474,7 +13474,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: You Win !
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0c54a37a2e8538d4fa62bdb69607f5be, type: 2}
   m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -13541,7 +13541,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &762640815
@@ -18965,11 +18965,11 @@ Transform:
   m_GameObject: {fileID: 1160288492}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -128.88365, y: 1.8542752, z: 10.9530325}
+  m_LocalPosition: {x: -10.893654, y: -2.5157247, z: 2.643032}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1535716936}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1168300304
 GameObject:
@@ -25711,11 +25711,11 @@ Transform:
   m_GameObject: {fileID: 1493932975}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -128.88365, y: 1.8342748, z: 15.047}
+  m_LocalPosition: {x: -10.893654, y: -2.535725, z: 6.7369995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1535716936}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1494775143
 GameObject:
@@ -27022,7 +27022,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1535716936}
   m_Layer: 0
-  m_Name: house (1)
+  m_Name: Good House
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27193,6 +27193,14 @@ Transform:
   - {fileID: 1220709924}
   - {fileID: 357665464}
   - {fileID: 1436178965}
+  - {fileID: 606452427}
+  - {fileID: 451662808}
+  - {fileID: 453367716}
+  - {fileID: 517402938}
+  - {fileID: 136764109}
+  - {fileID: 492145516}
+  - {fileID: 1160288495}
+  - {fileID: 1493932978}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1537005229
@@ -35825,6 +35833,18 @@ PrefabInstance:
 
 '
       objectReference: {fileID: 0}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 0c54a37a2e8538d4fa62bdb69607f5be, type: 2}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 4897719106268963712, guid: 0c54a37a2e8538d4fa62bdb69607f5be, type: 2}
+    - target: {fileID: 8395887266850853272, guid: a022b2c4cc37346a39dfc50c642a44d7, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -37808,7 +37828,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Game Over
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0c54a37a2e8538d4fa62bdb69607f5be, type: 2}
   m_sharedMaterial: {fileID: -3300415635147600836, guid: a14bca4fc69534aa7a912dde73dadfe8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -37875,7 +37895,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 4.093689, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2075215118
@@ -39203,11 +39223,3 @@ SceneRoots:
   - {fileID: 138523323}
   - {fileID: 5250422630385229008}
   - {fileID: 143271431}
-  - {fileID: 606452427}
-  - {fileID: 451662808}
-  - {fileID: 453367716}
-  - {fileID: 517402938}
-  - {fileID: 136764109}
-  - {fileID: 492145516}
-  - {fileID: 1160288495}
-  - {fileID: 1493932978}
