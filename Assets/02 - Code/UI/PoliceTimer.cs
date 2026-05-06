@@ -18,6 +18,7 @@ public class PoliceTimer : MonoBehaviour
     {
         _targetImage = canvasTimer.GetComponentInChildren<Image>();
         _material = _targetImage.material;
+        _material.SetFloat("_GlitchIntensity", 0f);
 
         GameManager.OnTimerUpdated += UpdateTimer;
         GameManager.OnGameStateChanged += OnGameStateChanged;

@@ -1917,6 +1917,9 @@ MonoBehaviour:
   - text: C'est fini.
     displayDuration: 2
     delayBefore: 1
+  - text: "Ti\xE9 le boss"
+    displayDuration: 2
+    delayBefore: 1
   onGameOver:
   - text: Matthieu..
     displayDuration: 2

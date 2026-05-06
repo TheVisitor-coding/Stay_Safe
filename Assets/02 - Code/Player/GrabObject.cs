@@ -59,7 +59,8 @@ public class GrabObject : MonoBehaviour
             if (_grabbedObject == null)
                 PickUpObject(rayOrigin, rayDirection);
             else
-                DropObject();
+                // DropObject(); --- IGNORE ---
+                return;
         }
     }
 
@@ -100,15 +101,15 @@ public class GrabObject : MonoBehaviour
         }
     }
 
-    private void DropObject()
-    {
-        Rigidbody rb = _grabbedObject.GetComponent<Rigidbody>();
-        rb.isKinematic = false;
-        _grabbedObject.transform.SetParent(null);
-        _grabbedObject.GetComponent<Collider>().enabled = true;
-        _grabbedObject.GetComponentInChildren<HintKey>()?.SetGrabbed(false);
-        _grabbedObject = null;
-    }
+    // private void DropObject()
+    // {
+    //     Rigidbody rb = _grabbedObject.GetComponent<Rigidbody>();
+    //     rb.isKinematic = false;
+    //     _grabbedObject.transform.SetParent(null);
+    //     _grabbedObject.GetComponent<Collider>().enabled = true;
+    //     _grabbedObject.GetComponentInChildren<HintKey>()?.SetGrabbed(false);
+    //     _grabbedObject = null;
+    // }
 
     void OnTriggerEnter(Collider other)
     {
